@@ -1,7 +1,7 @@
 /**
- * Absenden des Rückruf-Formulars an den PHP-Endpunkt auf dem WordPress-Server.
+ * Absenden des Demo-Formulars an den PHP-Endpunkt auf dem WordPress-Server.
  *
- * Im Build liegt die Seite unter blitzscan.de/reservierungssystem/, der Endpunkt
+ * Im Build liegt die Seite unter blitzscan.de/digitale-speisekarte/, der Endpunkt
  * unter blitzscan.de/api/ – also dieselbe Domain, kein CORS nötig. Für die
  * lokale Entwicklung lässt sich per VITE_LEAD_ENDPOINT eine vollständige URL
  * setzen (siehe .env.example).
@@ -15,6 +15,13 @@ const ENDPOINT = import.meta.env.VITE_LEAD_ENDPOINT ?? "/api/public/lead.php";
  * antwortet – der Besucher sieht dann nie, dass er es erneut versuchen kann.
  */
 const TIMEOUT_MS = 15_000;
+
+/**
+ * Kennung der Landingpage im Formular-Endpunkt, damit im Postfach sichtbar
+ * ist, zu welchem Produkt die Anfrage gehört. Die Schwesterseiten senden
+ * "reservierungssystem" bzw. "notfall-wechsel" an denselben Endpunkt.
+ */
+const LEAD_SOURCE = "digitale-speisekarte";
 
 export type LeadPayload = {
   restaurant: string;
@@ -45,7 +52,7 @@ export async function submitLead(payload: LeadPayload): Promise<void> {
     response = await fetch(ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...payload, source: "reservierungssystem" }),
+      body: JSON.stringify({ ...payload, source: LEAD_SOURCE }),
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
   } catch {

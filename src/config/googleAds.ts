@@ -10,10 +10,11 @@
  *   send_to: 'AW-18432836798/-1EnCLOIo6YdEL6Ju9VE'
  *             ^^^^^^^^^^^^^^ conversionId  ^^^^^^ Label
  *
- * Die Formular-Conversion "Lead – Reservierungssystem – Formular gesendet" hat
+ * Die Formular-Conversion "Lead – Digitale Speisekarte – Formular gesendet" hat
  * hier bewusst KEIN Label. Google Ads erkennt sie ausschließlich am Aufruf von
- * /reservierungssystem/danke (Seitenaufruf-Conversion im Konto). Ein
- * zusätzliches Conversion-Ereignis würde jede Anfrage doppelt zählen.
+ * /digitale-speisekarte/danke (Seitenaufruf-Conversion im Konto, siehe
+ * GOOGLE-ADS.md, 7.1). Ein zusätzliches Conversion-Ereignis würde jede
+ * Anfrage doppelt zählen.
  */
 /**
  * Nur auf diesen Domains wird an Google gesendet – Google Ads und GA4

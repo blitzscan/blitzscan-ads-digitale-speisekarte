@@ -4,15 +4,17 @@
  * Zwei getrennte Dinge passieren hier:
  *
  * 1. Conversions für Google Ads.
- *    - Lead: Im Konto als Seitenaufruf-Conversion für /reservierungssystem/danke
- *      eingerichtet. Die Seite sendet dafür kein Conversion-Ereignis, sondern
+ *    - Lead: Im Konto als Seitenaufruf-Conversion für /digitale-speisekarte/danke
+ *      einzurichten (siehe GOOGLE-ADS.md, 7.1). Die Seite sendet dafür kein
+ *      Conversion-Ereignis, sondern
  *      nur den Seitenaufruf (siehe trackPageView) – sonst zählt jede Anfrage
  *      doppelt.
  *    - Anruf und WhatsApp: manuelle Event-Conversions, je mit Label aus dem
  *      Konto, siehe src/config/googleAds.ts.
  * 2. Ereignisse für die Auswertung in GA4: Seitenaufrufe, `phone_click`,
- *    `whatsapp_click`, `form_submit_success`, dazu `button_click` mit der
- *    Kennung des Knopfes und `form_start` beim ersten Tippen ins Formular.
+ *    `whatsapp_click`, `form_submit_success`, `demo_cta_click`,
+ *    `live_demo_click`, dazu `button_click` mit der Kennung des Knopfes und
+ *    `form_start` beim ersten Tippen ins Formular.
  *
  * Diese Seite ist eine Single-Page-App: Der Wechsel auf /danke passiert im
  * Browser ohne Neuladen, der Google-Tag sieht von sich aus nur die erste
@@ -187,7 +189,7 @@ function sendConversion(label: string): void {
 /**
  * Meldet jeden Klick auf ein Element mit `data-track="kennung"`.
  *
- * Die Kennung benennt Ort und Zweck (z. B. `hero_callback`, `bar_whatsapp`),
+ * Die Kennung benennt Ort und Zweck (z. B. `hero_demo`, `bar_whatsapp`),
  * nicht den Text auf dem Knopf: Der ändert sich mit Sprache und Wortlaut, die
  * Auswertung soll aber über beides hinweg vergleichbar bleiben.
  */
@@ -275,4 +277,19 @@ export function trackCallClick(): void {
 export function trackWhatsAppClick(): void {
   sendConversion(GOOGLE_ADS.labels.whatsappClick);
   sendGa4Event("whatsapp_click");
+}
+
+/**
+ * Ein Knopf "Kostenlose Demo anfragen" wurde geklickt (führt zum Formular).
+ *
+ * Nur an GA4: Der Klick ist noch keine Anfrage. Wo geklickt wurde, steht im
+ * gleichzeitig gesendeten `button_click`.
+ */
+export function trackDemoCtaClick(): void {
+  sendGa4Event("demo_cta_click");
+}
+
+/** Jemand öffnet die Live-Demo der Speisekarte. Nur an GA4. */
+export function trackLiveDemoClick(): void {
+  sendGa4Event("live_demo_click");
 }

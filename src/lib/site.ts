@@ -6,25 +6,29 @@
  */
 
 /**
- * Monatspreis in Euro, netto. Speist den Kostenrechner.
+ * Live-Demo: eine echte BlitzScan-Gästeseite mit digitaler Speisekarte.
  *
- * Der Preis steht außerdem als Text in i18n.tsx (heroChip1, f2Text, cmp2New,
- * faq1A) – bei einer Preisänderung dort mit anpassen.
+ * Gesetzt → im Hero läuft die Seite in einem Handy-Rahmen (LiveDemoPhone in
+ * src/components/landing-sections.tsx), direkt bedienbar. Auf dem Handy und
+ * Tablet scrollt der Knopf "Live-Demo ansehen" (data-track "hero_live_demo")
+ * dorthin. `null` → kein Handy und kein Knopf, im Hero steht wieder das Foto.
+ *
+ * Nur eine Adresse eintragen, die auf dem Handy funktioniert, keine Testpreise
+ * zeigt und keinen "Bezahlen"-Knopf hat – Online-Zahlung ist keine
+ * freigegebene Standardfunktion.
+ *
+ * Variante "_bestellen": Bestellen ohne Bezahlen. Offen auf der Demo-Seite
+ * (Stand 29.10.2026): Classic Cheeseburger und BBQ Jalapeño Burger fehlen im
+ * Portal (nur feste Ersatzpreise, nicht bestellbar); Bestellen ohne Tisch-QR
+ * endet mit "Tisch-Link fehlt".
  */
-export const PRICE_MONTHLY = 29;
-
-/**
- * Gebühr pro Reservierung bei einem Provisionsmodell, in Euro. Rechenbeispiel
- * im Kostenrechner, kein Preis eines bestimmten Anbieters. Der Wert steht auch
- * als Text in i18n.tsx (calcNote) – bei einer Änderung dort mit anpassen.
- */
-export const FEE_PER_RESERVATION = 1.5;
+export const DEMO_URL: string | null = "https://blitzscan.de/speisekarte_bigbite_bestellen/";
 
 /**
  * Telefonnummer.
  *
- * Sichtbar als zweiter Knopf im Hero, in der festen Leiste am unteren Rand
- * (nur Handy) und im Fehlerhinweis des Formulars. In Kopf- und
+ * Sichtbar als kleiner Link unter den Hero-Knöpfen, in der festen Leiste am
+ * unteren Rand (nur Handy) und im Fehlerhinweis des Formulars. In Kopf- und
  * Fußzeile steht sie absichtlich nicht – dort würde sie vom Formular ablenken,
  * ohne jemandem zu helfen, der ohnehin schon liest.
  */

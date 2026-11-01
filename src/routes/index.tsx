@@ -5,36 +5,41 @@ import { z } from "zod";
 import { toast } from "sonner";
 import {
   AlertCircle,
+  BellRing,
   Check,
-  ChevronDown,
-  Clock,
-  Headset,
   Lock,
   MessageCircle,
   Phone,
-  ShieldCheck,
+  PlayCircle,
+  QrCode,
 } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 
 import {
   CallbackBanner,
   ComparisonSection,
-  CostSection,
+  DemoButton,
   FaqSection,
-  PortalSection,
+  LiveDemoButton,
+  LiveDemoPhone,
+  MenuSection,
+  MoreSection,
+  OrderSection,
+  ProblemSection,
+  RouteChips,
   StepsSection,
   StickyContactBar,
   TrustSection,
   WhatsAppLink,
-  scrollToForm,
 } from "@/components/landing-sections";
 import { SiteFooter } from "@/components/site-footer";
 import { cn } from "@/lib/utils";
 import { submitLead } from "@/lib/lead";
 import { LangToggle, useLang, translations, type Lang } from "@/lib/i18n";
-import { PHONE_DIAL, PHONE_DISPLAY } from "@/lib/site";
+import { DEMO_URL, PHONE_DIAL, PHONE_DISPLAY } from "@/lib/site";
 import { trackCallClick, trackFormStart, trackLead } from "@/lib/tracking";
 import logoUrl from "@/assets/blitzscan-logo.png";
+import heroUrl from "@/assets/gast-speisekarte-am-tisch.webp";
 
 const hasVowel = (s: string) => /[aeiouäöü]/i.test(s);
 
@@ -117,32 +122,46 @@ const buildSchema = (lang: Lang) => {
 
 type FormData = z.infer<ReturnType<typeof buildSchema>>;
 
+const META_TITLE = "Digitale Speisekarte & Bestellsystem für Restaurants | BlitzScan";
+const META_DESCRIPTION =
+  "Digitale Speisekarte mit Bestellfunktion für Restaurants. Gäste bestellen per QR-Code direkt am Tisch. Persönliche Einrichtung und direkter Support mit BlitzScan.";
+
+/**
+ * Endgültige Adresse der Seite, z. B. https://blitzscan.de/digitale-speisekarte/.
+ *
+ * Nur im Build für blitzscan.de bekannt (BASE_URL = Upload-Ordner). Im
+ * Lovable-Build ist BASE_URL "/" – dann entfallen Canonical, og:url und
+ * og:image, statt auf die Startseite von blitzscan.de zu zeigen.
+ */
+const PAGE_URL =
+  import.meta.env.BASE_URL === "/" ? null : `https://blitzscan.de${import.meta.env.BASE_URL}`;
+
 export const Route = createFileRoute("/")({
-  component: ReservierungssystemLanding,
+  component: DigitaleSpeisekarteLanding,
   head: () => ({
     meta: [
-      { title: "Reservierungssystem für Restaurants: 29 €/Monat, 0 % Provision | BlitzScan" },
-      {
-        name: "description",
-        content:
-          "Online-Reservierungen für Ihr Restaurant – in 48 Stunden live, 29 € im Monat, ohne Provision pro Gast. Persönlich eingerichtet von Ihrem Partner aus Köln.",
-      },
-      {
-        property: "og:title",
-        content: "Reservierungssystem für Restaurants: 29 €/Monat, 0 % Provision | BlitzScan",
-      },
-      {
-        property: "og:description",
-        content:
-          "Online-Reservierungen für Ihr Restaurant – in 48 Stunden live, 29 € im Monat, ohne Provision pro Gast. Persönlich eingerichtet von Ihrem Partner aus Köln.",
-      },
+      { title: META_TITLE },
+      { name: "description", content: META_DESCRIPTION },
+      { property: "og:title", content: META_TITLE },
+      { property: "og:description", content: META_DESCRIPTION },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "BlitzScan" },
       { name: "twitter:card", content: "summary_large_image" },
+      ...(PAGE_URL
+        ? [
+            { property: "og:url", content: PAGE_URL },
+            // public/og-digitale-speisekarte.jpg, 1200 × 630
+            { property: "og:image", content: `${PAGE_URL}og-digitale-speisekarte.jpg` },
+            { property: "og:image:width", content: "1200" },
+            { property: "og:image:height", content: "630" },
+          ]
+        : []),
     ],
+    links: PAGE_URL ? [{ rel: "canonical", href: PAGE_URL }] : [],
   }),
 });
 
-function ReservierungssystemLanding() {
+function DigitaleSpeisekarteLanding() {
   const { t, lang } = useLang();
   const navigate = useNavigate();
   const schema = useMemo(() => buildSchema(lang), [lang]);
@@ -194,110 +213,114 @@ function ReservierungssystemLanding() {
 
   return (
     <main className="min-h-screen bg-background">
-      {/* 1. Hero Section */}
+      {/* 1. Hero: Was, für wen, wie – und der Weg zur Demo, alles über der Falz. */}
       <section
         id="top"
-        className="section-navy relative flex min-h-[100dvh] flex-col items-center justify-center px-6 py-24 text-center"
+        className="section-navy relative overflow-hidden px-4 pb-14 pt-20 sm:px-6 sm:pb-16 sm:pt-28 md:pb-24 lg:flex lg:min-h-[100dvh] lg:items-center"
       >
         <a
           href={import.meta.env.BASE_URL}
           data-track="hero_logo"
-          className="absolute left-5 top-5 z-10 rounded-xl bg-white p-1.5 shadow-lg shadow-black/10 transition-transform duration-200 hover:scale-[1.02] sm:left-6 sm:top-6"
+          className="absolute left-4 top-4 z-10 rounded-xl bg-white p-1.5 shadow-lg shadow-black/10 transition-transform duration-200 hover:scale-[1.02] sm:left-6 sm:top-6"
           aria-label={t("logoAria")}
         >
           <img
             src={logoUrl}
             alt="BlitzScan"
-            className="h-12 w-auto sm:h-14"
+            className="h-10 w-auto sm:h-14"
             width="56"
             height="56"
           />
         </a>
 
-        <LangToggle className="absolute right-5 top-5 z-10 inline-flex h-10 min-w-14 items-center justify-center rounded-xl border border-white/25 bg-white/10 px-4 text-sm font-bold uppercase tracking-wide text-white backdrop-blur transition-colors hover:bg-white/20 sm:right-6 sm:top-6" />
+        <LangToggle className="absolute right-4 top-4 z-10 inline-flex h-10 min-w-14 items-center justify-center rounded-xl border border-white/25 bg-white/10 px-4 text-sm font-bold uppercase tracking-wide text-white backdrop-blur transition-colors hover:bg-white/20 sm:right-6 sm:top-6" />
 
-        <div className="mx-auto max-w-3xl">
-          <span className="mb-5 inline-block rounded-full bg-amber/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-amber">
-            {t("eyebrow")}
-          </span>
-          {/* hyphens-auto: "Reservierungssystem" ist auf 360 px sonst breiter als die Zeile. */}
-          <h1 className="text-balance hyphens-auto text-[2rem] font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl md:text-6xl">
-            {t("h1")}
-          </h1>
-          <p className="text-balance mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-light sm:text-xl md:mt-8">
-            {t("heroSub")}
-          </p>
-          {/* Der Preis gehört über die Falz: Er ist das stärkste Argument
-              gegen die Provisionsmodelle und bei keinem Wettbewerber so niedrig. */}
-          <ul className="mt-8 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-            {(["heroChip1", "heroChip2", "heroChip3"] as const).map((key) => (
-              <li
-                key={key}
-                className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-sm font-semibold text-white"
-              >
-                <Check className="h-4 w-4 text-amber" aria-hidden="true" />
-                {t(key)}
-              </li>
-            ))}
-          </ul>
-          <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <button
-              onClick={scrollToForm}
-              data-track="hero_callback"
-              className="inline-flex h-14 w-full max-w-xs items-center justify-center rounded-xl bg-amber px-8 text-base font-bold text-navy shadow-lg shadow-amber/20 transition-all duration-200 hover:bg-amber-light hover:shadow-amber/30 active:scale-[0.98] active:bg-amber-dark sm:w-auto"
-            >
-              {t("heroCta")}
-            </button>
-            {/* Zweitrangig gestaltet (nur Umriss, kein Amber): Wer lieber tippt,
-                soll zum Formular geführt werden, wer es eilig hat, kann anrufen. */}
-            <a
-              href={`tel:${PHONE_DIAL}`}
-              onClick={trackCallClick}
-              data-track="hero_call"
-              className="inline-flex h-14 w-full max-w-xs items-center justify-center gap-2 rounded-xl border border-white/30 px-6 text-base font-bold text-white transition-colors hover:bg-white/10 sm:w-auto"
-            >
-              <Phone className="h-5 w-5 shrink-0 text-amber" aria-hidden="true" />
-              {PHONE_DISPLAY}
-            </a>
+        <div className="mx-auto grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-14">
+          {/* Auf dem Handy steht der Knopf direkt unter der Unterzeile, die drei
+              Nutzenpunkte folgen darunter (order-last). So ist der Knopf auch auf
+              360 × 740 ohne Scrollen sichtbar – trotz Cookie-Banner. Ab lg die
+              übliche Reihenfolge: Nutzen, dann Knopf. */}
+          <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
+            <span className="mb-4 inline-block rounded-full bg-amber/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-amber sm:mb-5">
+              {t("eyebrow")}
+            </span>
+            {/* hyphens-auto: "Bestellfunktion" ist auf 360 px sonst breiter als die Zeile. */}
+            <h1 className="text-balance hyphens-auto text-[1.85rem] font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-[3.25rem]">
+              {t("h1")}
+            </h1>
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-light sm:mt-5 sm:text-lg">
+              {t("heroSub")}
+            </p>
+            <ul className="order-last mt-7 flex w-fit flex-col gap-2.5 text-left lg:order-none lg:mt-6">
+              {(["heroChip1", "heroChip2", "heroChip3"] as const).map((key) => (
+                <li
+                  key={key}
+                  className="flex items-start gap-2.5 text-[0.95rem] font-semibold text-white sm:text-base"
+                >
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber">
+                    <Check className="h-3.5 w-3.5 text-navy" aria-hidden="true" />
+                  </span>
+                  {t(key)}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-6 flex w-full flex-col items-center sm:mt-8 lg:items-start">
+              <div className="flex w-full max-w-sm flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row">
+                <DemoButton track="hero_demo" className="px-8">
+                  {t("heroCta")}
+                </DemoButton>
+                {/* Zweitrangig gestaltet (nur Umriss). Scrollt zum Handy mit der
+                    Live-Demo; ab lg steht das Handy ohnehin daneben, dort
+                    entfällt der Knopf. Erscheint nur, wenn in src/lib/site.ts
+                    eine geprüfte Demo-Adresse steht. */}
+                <LiveDemoButton
+                  data-track="hero_live_demo"
+                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-white/30 px-6 text-base font-bold text-white transition-colors hover:bg-white/10 sm:h-14 sm:w-auto lg:hidden"
+                >
+                  <PlayCircle className="h-5 w-5 shrink-0 text-amber" aria-hidden="true" />
+                  {t("heroDemo")}
+                </LiveDemoButton>
+              </div>
+              <p className="mt-2 text-sm text-slate-light">
+                {t("heroNote")} {t("heroCall")}{" "}
+                <a
+                  href={`tel:${PHONE_DIAL}`}
+                  onClick={trackCallClick}
+                  data-track="hero_call"
+                  className="inline-flex items-center gap-1 py-2 font-semibold whitespace-nowrap text-white underline decoration-white/30 underline-offset-4 transition-colors hover:decoration-amber"
+                >
+                  <Phone className="h-3.5 w-3.5 text-amber" aria-hidden="true" />
+                  {PHONE_DISPLAY}
+                </a>
+              </p>
+            </div>
           </div>
-        </div>
 
-        <button
-          onClick={scrollToForm}
-          data-track="hero_scroll"
-          aria-label={t("scrollAria")}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-slate-light transition-colors hover:text-white"
-        >
-          <ChevronDown className="h-8 w-8" />
-        </button>
-      </section>
-
-      {/* 2. Die drei Versprechen */}
-      <section id="vorteile" className="scroll-mt-4 px-6 py-20 md:py-28">
-        <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-3 md:gap-10">
-          <FeatureCard icon={Clock} title={t("f1Title")} text={t("f1Text")} />
-          <FeatureCard icon={ShieldCheck} title={t("f2Title")} text={t("f2Text")} />
-          <FeatureCard icon={Headset} title={t("f3Title")} text={t("f3Text")} />
+          <HeroVisual />
         </div>
       </section>
 
-      {/* Wer noch kein System hat, will erst sehen, was er bekommt, und dann, was
-          es kostet: Portal vor Preis. Die Hintergründe wechseln dabei von selbst
-          (weiß, grau, Marineblau, weiß). */}
-      <PortalSection />
-      <CostSection />
+      <ProblemSection />
       <StepsSection />
-      <CallbackBanner />
+      <MenuSection />
+      <OrderSection />
       <ComparisonSection />
       <TrustSection />
+      <CallbackBanner />
+      <MoreSection />
       <FaqSection />
 
       {/* Lead Capture Form Section */}
-      <section id="kontakt" className="scroll-mt-4 px-6 py-20 md:py-28">
+      {/* Auf dem Handy wenig Innenabstand: Die Felder sollen fast die volle
+          Breite haben, sonst wird das Tippen fummelig. */}
+      <section
+        id="kontakt"
+        className="section-muted scroll-mt-4 px-3 py-14 sm:px-6 sm:py-20 md:py-28"
+      >
         <div className="mx-auto max-w-xl">
-          <div className="rounded-3xl bg-card p-8 shadow-xl shadow-navy/5 ring-1 ring-border sm:p-10">
+          <div className="rounded-3xl bg-card px-5 py-8 shadow-xl shadow-navy/5 ring-1 ring-border sm:p-10">
             <div className="text-center">
-              <h2 className="text-balance text-3xl font-bold tracking-tight text-card-foreground sm:text-4xl">
+              <h2 className="text-balance text-[1.75rem] font-bold leading-tight tracking-tight text-card-foreground sm:text-4xl">
                 {t("formTitle")}
               </h2>
               <p className="text-balance mx-auto mt-4 max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg">
@@ -318,7 +341,7 @@ function ReservierungssystemLanding() {
             <form
               onSubmit={handleSubmit(onSubmit)}
               onFocus={trackFormStart}
-              className="relative mt-10 space-y-5"
+              className="relative mt-8 space-y-5 sm:mt-10"
               noValidate
             >
               {/* Honigtopf: für Menschen unsichtbar, für Bots verlockend. Nicht mit
@@ -431,7 +454,7 @@ function ReservierungssystemLanding() {
                 {t("formAlt")}{" "}
                 <WhatsAppLink
                   data-track="form_whatsapp"
-                  className="inline-flex items-center gap-1.5 font-semibold text-foreground underline decoration-amber decoration-2 underline-offset-4 transition-colors hover:text-amber-dark"
+                  className="inline-flex items-center gap-1.5 py-2 font-semibold text-foreground underline decoration-amber decoration-2 underline-offset-4 transition-colors hover:text-amber-dark"
                 >
                   <MessageCircle className="h-4 w-4 text-[#25D366]" aria-hidden="true" />
                   {t("formAltLink")}
@@ -507,22 +530,78 @@ const Field = ({
   </div>
 );
 
-function FeatureCard({
-  icon: Icon,
-  title,
-  text,
-}: {
-  icon: React.ComponentType<{ className?: string }>;
-  title: string;
-  text: string;
-}) {
+/** Bestell-Bon, wie er im Restaurant ankommt. */
+function OrderTicket({ className }: { className?: string }) {
+  const { t } = useLang();
+
   return (
-    <div className="flex flex-col items-center rounded-2xl bg-card p-8 text-center shadow-lg shadow-navy/5 ring-1 ring-border transition-transform duration-200 hover:-translate-y-1 sm:p-10">
-      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-amber/10">
-        <Icon className="h-7 w-7 text-amber" />
+    <div
+      aria-hidden="true"
+      className={cn(
+        "w-64 rounded-2xl bg-card p-4 text-left text-card-foreground shadow-2xl shadow-black/30 ring-1 ring-border",
+        className,
+      )}
+    >
+      <div className="flex items-center gap-3">
+        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-amber/15">
+          <BellRing className="h-4.5 w-4.5 text-amber-dark" />
+        </span>
+        <div>
+          <p className="text-sm font-bold leading-tight">{t("ticketLabel")}</p>
+          <p className="text-xs text-muted-foreground">{t("ticketMeta")}</p>
+        </div>
       </div>
-      <h3 className="mt-6 text-xl font-bold text-card-foreground">{title}</h3>
-      <p className="mt-3 leading-relaxed text-muted-foreground">{text}</p>
+      <ul className="mt-3 space-y-1 border-t pt-3 text-sm">
+        <li>{t("ticketItem1")}</li>
+        <li>{t("ticketItem2")}</li>
+        <li>{t("ticketItem3")}</li>
+      </ul>
+      <RouteChips className="mt-3" />
+    </div>
+  );
+}
+
+/**
+ * Produktbild im Hero.
+ *
+ * Mit DEMO_URL: die Live-Demo im Handy, direkt bedienbar – wie auf
+ * blitzscan.de. Der Bon daneben zeigt, wo die Bestellung ankommt. Er
+ * erscheint erst ab lg links neben dem Handy; auf dem Handy würde er die
+ * bedienbare Demo verdecken.
+ *
+ * Ohne DEMO_URL: das Foto vom Gast mit der Speisekarte am Tisch plus Bon.
+ */
+function HeroVisual() {
+  const { t } = useLang();
+
+  if (DEMO_URL) {
+    return (
+      <div className="relative pt-4 lg:pt-0">
+        <LiveDemoPhone className="lg:mr-0 lg:ml-auto" />
+        <OrderTicket className="absolute bottom-12 -left-8 hidden w-56 lg:block xl:left-0 xl:w-64" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative mx-auto w-full max-w-md sm:max-w-lg lg:max-w-none">
+      <div className="relative overflow-hidden rounded-3xl shadow-2xl shadow-black/40 ring-1 ring-white/10">
+        <img
+          src={heroUrl}
+          alt={t("heroImgAlt")}
+          width={1000}
+          height={750}
+          fetchPriority="high"
+          decoding="async"
+          className="h-auto w-full"
+        />
+        <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold text-navy shadow-lg sm:left-4 sm:top-4">
+          <QrCode className="h-3.5 w-3.5 text-amber-dark" aria-hidden="true" />
+          {t("heroBadge")}
+        </span>
+      </div>
+
+      <OrderTicket className="relative z-10 -mt-10 ml-auto mr-3 sm:mr-6 lg:absolute lg:-bottom-8 lg:-left-8 lg:m-0" />
     </div>
   );
 }
