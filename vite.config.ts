@@ -7,14 +7,14 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 /**
- * Zielordner auf dem WordPress-Server, z. B. blitzscan.de/reservierungssystem/
+ * Zielordner auf dem WordPress-Server, z. B. blitzscan.de/digitale-speisekarte/
  *
  * Steht in der Umgebungsvariable DEPLOY_DIR, die `npm run build:static` setzt
  * (siehe scripts/build-static.mjs und DEPLOY.md). Alle Dateipfade der fertigen
  * Seite beginnen mit diesem Ordner – liegt die Seite auf dem Server woanders,
  * lädt sie weder CSS noch Skripte.
  */
-const DEPLOY_PATH = `/${process.env["DEPLOY_DIR"] ?? "reservierungssystem"}/`;
+const DEPLOY_PATH = `/${process.env["DEPLOY_DIR"] ?? "digitale-speisekarte"}/`;
 
 /**
  * `npm run build:static` setzt BUILD_STATIC=1 und baut die Seite für das

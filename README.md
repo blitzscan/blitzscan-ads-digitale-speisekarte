@@ -1,12 +1,23 @@
-# Reservierungssystem – Landingpage
+# Digitale Speisekarte + Bestellen am Tisch – Landingpage
 
-Conversion-Landingpage für das BlitzScan-Reservierungssystem (Google Ads). Ziel der
-Seite: Gastronomen ohne Reservierungssystem zum Rückruf-Formular führen.
+Conversion-Landingpage für die BlitzScan-Kampagne „Digitale Speisekarte +
+Bestellen am Tisch“ (Google Ads). Zielgruppe: Restaurantinhaber und
+-manager. Einziges Ziel der Seite: das Formular „Kostenlose Demo anfragen“.
 
-- **Aufbau:** Hero → Vorteile → Portal → Preis & Kostenrechner → Ablauf → Vergleich →
-  Vertrauen → FAQ → Formular. Die Texte stehen in `src/lib/i18n.tsx` (DE/EN), die
+- **Aufbau:** Hero → Problem → So funktioniert es → Digitale Speisekarte →
+  Bestellen am Tisch (+ Demo-Knopf) → Vergleich Papier/PDF/BlitzScan →
+  Einrichtung & Ansprechpartner → Zwischenaufruf → optionale Erweiterungen →
+  FAQ → Formular. Die Texte stehen in `src/lib/i18n.tsx` (DE/EN), die
   Abschnitte in `src/components/landing-sections.tsx`.
-- **Adresse:** blitzscan.de/reservierungssystem/ – Upload siehe `DEPLOY.md`.
+- **Bilder:** echte Screenshots aus dem Kundenportal (`portal-speisekarte`,
+  `portal-bestellungen` – auf dem Handy als vergrößerter Ausschnitt),
+  Gäste-Motive (`gast-*`) und Team-Fotos, übernommen von blitzscan.de.
+  Vorschaubild für geteilte Links: `public/og-digitale-speisekarte.jpg`.
+- **Produktaussagen:** nur, was auf blitzscan.de belegt ist (Preise-Seite,
+  FAQ, Referenzen). Keine Preise, keine Online-Zahlung, keine Kassenanbindung
+  auf der Seite, solange nicht freigegeben.
+- **Adresse:** blitzscan.de/digitale-speisekarte/, Danke-Seite
+  /digitale-speisekarte/danke – Upload siehe `DEPLOY.md`.
 - **Anzeigen & Tracking:** `GOOGLE-ADS.md`. Jeder Knopf trägt ein `data-track` und
   wird als Klick gemeldet (`src/lib/tracking.ts`).
 
