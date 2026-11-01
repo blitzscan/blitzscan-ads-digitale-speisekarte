@@ -261,14 +261,16 @@ Anzeigenklick → page_view → button_click (hero_demo / order_demo / banner_de
 Ein neuer Knopf braucht im Code nur `data-track="ort_zweck"`.
 
 **Live-Demo.** Im Hero läuft
-`https://blitzscan.de/speisekarte_bigbite_bestellen/` (Bestellen ohne
-Bezahlen) in einem Handy-Rahmen, direkt bedienbar – wie auf blitzscan.de, kein
-neuer Tab. Auf Touch-Geräten liegt zuerst „Antippen und ausprobieren“ darüber,
+`https://blitzscan.de/speisekarte_bigbite/` (Bestellen ohne Bezahlen) in einem
+Handy-Rahmen, direkt bedienbar – wie auf blitzscan.de, kein neuer Tab.
+„Bestellen“ zeigt dort einen Demo-Hinweis; dessen Knopf „BlitzScan
+kontaktieren“ führt auf dieser Landingpage zu `#kontakt`, auf
+blitzscan.de/home/ zu `/home/kontakt`. Auf Touch-Geräten liegt zuerst „Antippen und ausprobieren“ darüber,
 damit Wischen über das Handy die Seite scrollt und nicht die Demo. Der Knopf
 „Live-Demo ansehen“ (nur Handy/Tablet) scrollt zum Handy. Adresse in
 `src/lib/site.ts` (`DEMO_URL`); `null` blendet Handy und Knopf aus, dann steht
-wieder das Foto im Hero. Nicht verwenden: `speisekarte_bigbite`
-(„Bezahlen“-Knopf mit Stripe).
+wieder das Foto im Hero. Keine Demo-Adresse mit „Bezahlen“-Knopf eintragen
+(Online-Zahlung ist keine freigegebene Standardfunktion).
 
 ### 7.3 Einwilligung
 

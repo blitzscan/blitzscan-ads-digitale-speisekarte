@@ -17,12 +17,12 @@
  * zeigt und keinen "Bezahlen"-Knopf hat – Online-Zahlung ist keine
  * freigegebene Standardfunktion.
  *
- * Variante "_bestellen": Bestellen ohne Bezahlen. Offen auf der Demo-Seite
- * (Stand 29.10.2026): Classic Cheeseburger und BBQ Jalapeño Burger fehlen im
- * Portal (nur feste Ersatzpreise, nicht bestellbar); Bestellen ohne Tisch-QR
- * endet mit "Tisch-Link fehlt".
+ * Stand 01.11.2026: Bestellen ohne Bezahlen. Im Dashboard deaktivierte
+ * Gerichte werden ausgeblendet; "Bestellen" ohne Tisch-QR zeigt einen
+ * Demo-Hinweis mit Link zum Kontaktformular dieser Seite (#kontakt).
+ * Die alte Adresse ".../speisekarte_bigbite_bestellen/" gibt es nicht mehr.
  */
-export const DEMO_URL: string | null = "https://blitzscan.de/speisekarte_bigbite_bestellen/";
+export const DEMO_URL: string | null = "https://blitzscan.de/speisekarte_bigbite/";
 
 /**
  * Telefonnummer.
